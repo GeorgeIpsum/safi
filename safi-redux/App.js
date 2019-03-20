@@ -5,22 +5,45 @@ import { Provider, connect } from 'react-redux';
 import axios from 'axios';
 import axiosMiddleware from 'redux-axios-middleware';
 
-import reducer from './reducer';
+import {createBottomTabNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
 import RepoList from './RepoList';
+import RepoDetail from './RepoDetail';
+import Profile from './Profile';
+import reducer from './reducer';
 
 const client = axios.create({
-  baseUrl: 'https://api.github.com',
-  responseType: 'json'
+  baseURL: 'https://api.github.com',
+  responseType: 'json',
 });
 
 const store = createStore(reducer, applyMiddleware(axiosMiddleware(client)));
+
+const Tabs = createBottomTabNavigator({
+  RepoList: {
+    screen: RepoList
+  },
+  Profile: {
+    screen: Profile
+  },
+});
+
+const Stack = createStackNavigator({
+  Home: {
+    screen: Tabs
+  },
+  Detail: {
+    screen: RepoDetail
+  }
+});
+
+const AppNavigator = createAppContainer(Stack);
 
 export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          <RepoList />
+          <AppNavigator />
         </View>
       </Provider>
     );
@@ -31,8 +54,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 50
   },
 });

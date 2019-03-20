@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, Stylesheet} from 'react-native';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 
 import {listRepos} from './reducer';
 
 class RepoList extends Component {
+  static navigationOptions = {
+    title: 'RepoList'
+  };
   componentDidMount() {
     this.props.listRepos('georgeipsum');
   }
 
   renderItem = ({item}) => (
-    <View style={styles.item}>
+    <TouchableOpacity style={styles.item} onPress={() => this.props.navigation.navigate('Detail', {name: item.name})}>
       <Text>{item.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   render() {
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  let storedRepositories = state.repos.map(repo => ({ key: repo.id, ...repo }));
+  let storedRepositories = state.repos.map(repo => ({ key: repo.id.toString(), ...repo }));
   return {
     repos: storedRepositories
   };
