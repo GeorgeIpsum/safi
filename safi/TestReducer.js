@@ -11,7 +11,13 @@ const INITIAL_STATE = {
   ],
 };
 
-const testReducer = (state = INITIAL_STATE, action) => {
+const testReducer = (state, action) => {
+  switch(action.type) {
+    
+  }
+}
+
+const testsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ADD_TEST:
       const {
@@ -32,5 +38,5 @@ const testReducer = (state = INITIAL_STATE, action) => {
 }
 
 export default combineReducers({
-  tests: testReducer,
+  tests: testsReducer,
 });

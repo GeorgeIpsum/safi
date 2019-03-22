@@ -12,7 +12,7 @@ export const GET_USER_FAIL = 'safi-redux/repos/USER_FAIL';
 
 const initialState = { repos: [], repoInfo: {}, user: {} };
 
-export default function reducer(state = initialState, action) {
+export default reducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_REPOS:
       return {...state, loading: true};
@@ -51,7 +51,7 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export function listRepos(user) {
+export const listRepos = (user) => {
   return {
     type: GET_REPOS,
     payload: {

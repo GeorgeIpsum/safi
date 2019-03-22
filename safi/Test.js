@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => { 
   const { tests } = state;
   return { tests };
 };
