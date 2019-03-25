@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Text, View } from 'react-native';
 import { Input, TextLink, Loading, Button } from './common';
+import axios from 'axios';
+import deviceStorage from '../services/deviceStorage';
 
 class Login extends Component {
   constructor(props){
@@ -11,6 +13,32 @@ class Login extends Component {
       error: '',
       loading: false
     };
+    this.loginUser = this.loginUser.bind(this);
+    this.onLoginFail = this.onLoginFail.bind(this);
+  }
+
+  loginUser() {
+    const {email, password, password_confirmation} = this.state;
+    this.setState({error: '', loading: true});
+
+    axios.post("http://localhost:4000/api/v1/users/login", {
+      email: email,
+      password: password
+    })
+    .then((res) => {
+      deviceStorage.saveItem("id_token", res.data.jwt);
+      this.props.newJWT(res.data.jwt);
+    })
+    .catch((err) => {
+      this.onLoginFail();
+    })
+  }
+
+  onLoginFail() {
+    this.setState({
+      error: 'Login Failed',
+      loading: false,
+    });
   }
 
   render() {
@@ -44,7 +72,7 @@ class Login extends Component {
           </Text>
 
           {!loading ?
-            <Button>
+            <Button onPress={this.loginUser}>
               Login
             </Button>
             :

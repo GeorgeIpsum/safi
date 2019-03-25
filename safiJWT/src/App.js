@@ -11,6 +11,7 @@ import { Loading } from './components/common/';
 import Auth from './screens/Auth';
 import LoggedIn from './screens/LoggedIn';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import deviceStorage from './services/deviceStorage';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -24,17 +25,32 @@ export default class App extends Component {
     super();
     this.state = {
       jwt: '',
+      loading: true
     }
+    this.newJWT = this.newJWT.bind(this);
+    this.deleteJWT = deviceStorage.deleteJWT.bind(this);
+    this.loadJWT = deviceStorage.loadJWT.bind(this)
+    this.loadJWT();
+  }
+
+  newJWT(jwt){
+    this.setState({
+      jwt: jwt
+    });
   }
 
   render() {
-    if(!this.state.jwt) {
+    if(this.state.loading) {
       return (
-        <Auth />
+        <Loading size={'large'} />
+      );
+    } else if(!this.state.jwt) {
+      return (
+        <Auth newJWT={this.newJWT} />
       );
     } else if(this.state.jwt) {
       return (
-        <LoggedIn />
+        <LoggedIn jwt={this.state.jwt} deleteJWT={this.deleteJWT} />
       );
     }
   }
